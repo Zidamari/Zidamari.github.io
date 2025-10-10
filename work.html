@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work | Zidane Marican</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="logo">
+                <a href="index.html" class="logo-link">ZIDANE MARICAN</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="work.html">Work</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="playground.html">Playground</a></li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+
+    <div class="wrapper">
+        <main>
+            <section class="work-section">
+                <h1>My Work & Projects</h1>
+                <p class="section-intro">Here are some of the projects I'm proud of. Each one was a unique challenge and a great learning experience. Click 'Details' to see the full case study.</p>
+
+                <div class="project-grid">
+
+                    <div class="project-card">
+                        <div class="project-image"></div>
+                        <div class="project-content">
+                            <h3>Project Title Here</h3>
+                            <p>A brief but engaging description of the project. This summary should entice visitors to click the 'Details' button to learn more.</p>
+                            <ul class="project-tags">
+                                <li>JavaScript</li>
+                                <li>Python</li>
+                                <li>ROS</li>
+                            </ul>
+                            <div class="project-links">
+                                <a href="#" class="project-button" data-modal-trigger="1">Details</a>
+                                <a href="#" class="project-button-secondary">View on GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-image"></div>
+                        <div class="project-content">
+                            <h3>Another Cool Project</h3>
+                            <p>This project focused on solving a different kind of problem. I used my skills in both design and development to create a comprehensive solution.</p>
+                            <ul class="project-tags">
+                                <li>C++</li>
+                                <li>Fusion 360</li>
+                                <li>OpenCV</li>
+                            </ul>
+                            <div class="project-links">
+                                <a href="#" class="project-button" data-modal-trigger="2">Details</a>
+                                <a href="#" class="project-button-secondary">Source Code</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="github-section">
+                    <h2>Latest from GitHub</h2>
+                    <div id="github-repos-container">
+                        </div>
+                </div> -->
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="project-modal-overlay">
+        <div class="modal-content" id="project-modal-content">
+            </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

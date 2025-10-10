@@ -1,0 +1,633 @@
+/* 1. Import the Google Font at the very top */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;900&display=swap');
+
+/* 2. General body and default font styles */
+body {
+    background-color: #ffffff; 
+    color: #111111; 
+    font-family: 'Archivo', sans-serif;
+    margin: 0;
+}
+
+/* 3. Wrapper for content alignment */
+.wrapper {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 4. Header, Logo, and Navigation */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 0;
+}
+.logo {
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 40px;
+}
+nav a {
+    text-decoration: none;
+    color: #111111;
+    font-size: 1.1rem;
+    position: relative;
+    padding-bottom: 5px;
+}
+nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #111111;
+    transition: width 0.3s ease-in-out;
+}
+nav a:hover::after {
+    width: 100%;
+}
+.logo-link {
+    text-decoration: none;
+    color: #111111;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+    background-color: black;
+    overflow: hidden;
+}
+#video-background {
+    position: absolute;
+    visibility: hidden;
+    bottom: 0;
+    right: 0;
+}
+#halftone-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; 
+}
+.main-headline {
+    position: relative;
+    z-index: 3;
+    color: white;
+    -webkit-text-stroke: 2px grey;
+    text-stroke: 2px grey;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+    font-weight: 900;
+    font-size: 8rem;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    margin: 0;
+    text-align: center;
+}
+
+/* 5. About Me Section Styles (Homepage) */
+.about-section {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    background-color: #f5f5f5;
+    padding: 60px;
+    border-radius: 10px;
+    margin-bottom: 80px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+.about-text { flex: 2; }
+.about-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.about-text h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+.about-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    max-width: 600px; 
+}
+.image-placeholder {
+    width: 300px;
+    height: 300px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+}
+
+/* 6. Contact Section Styles */
+.contact-section { padding: 80px 0; }
+.contact-section h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 60px;
+}
+.contact-container {
+    display: flex;
+    gap: 80px;
+    flex-wrap: wrap;
+}
+.contact-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+.contact-form {
+    flex: 1;
+    min-width: 300px;
+}
+.contact-item { line-height: 1.8; }
+.contact-item-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+.contact-item-header svg { stroke: #111111; }
+.contact-item h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+.contact-item p { margin: 0 0 15px 0; }
+.contact-link {
+    font-weight: 900;
+    color: #111111;
+    text-decoration: none;
+    border-bottom: 2px solid #111111;
+    padding-bottom: 2px;
+}
+.contact-form h3 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+.form-group { margin-bottom: 20px; }
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-family: 'Archivo', sans-serif;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+.submit-button {
+    background-color: #111111;
+    color: #ffffff;
+    border: none;
+    padding: 15px 30px;
+    font-family: 'Archivo', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.submit-button:hover { background-color: #555555; }
+
+/* 7. Page Transition Styles */
+body { animation: fadeInAnimation 0.5s ease-in-out; }
+@keyframes fadeInAnimation { from { opacity: 0; } to { opacity: 1; } }
+body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
+@keyframes fadeOutAnimation { from { opacity: 1; } to { opacity: 0; } }
+
+
+/* --- 8. Work Page & Project Styles --- */
+.work-section { padding: 60px 0; }
+.work-section h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.section-intro {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 60px auto;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+.project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+}
+@media (min-width: 768px) {
+    .project-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.project-card {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.project-image {
+    width: 100%;
+    height: 250px;
+    background-color: #e0e0e0;
+}
+.project-content {
+    padding: 25px;
+}
+.project-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+}
+.project-tags {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.project-tags li {
+    background-color: #e0e0e0;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+.project-links {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.project-button, .project-button-secondary {
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+.project-button {
+    background-color: #111;
+    color: #fff;
+}
+.project-button-secondary {
+    background-color: #fff;
+    color: #111;
+    border: 1px solid #ccc;
+}
+.project-button:hover, .project-button-secondary:hover {
+    transform: translateY(-2px);
+}
+
+/* --- 9. Project Detail Page Styles --- */
+.project-hero {
+    background-color: #111;
+    color: #fff;
+    padding: 80px 0;
+    text-align: center;
+}
+.project-hero h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 0 0 10px 0;
+}
+.project-subtitle {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    opacity: 0.8;
+}
+.project-detail-layout {
+    display: flex;
+    gap: 60px;
+    padding: 80px 0;
+    align-items: flex-start;
+}
+.project-content-main {
+    flex: 3;
+}
+.project-sidebar {
+    flex: 1;
+    position: sticky;
+    top: 40px;
+    background-color: #f5f5f5;
+    padding: 30px;
+    border-radius: 10px;
+}
+.project-detail-image {
+    width: 100%;
+    height: 400px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+.project-content-main h2 {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-top: 40px;
+    margin-bottom: 15px;
+}
+.project-content-main p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+.project-sidebar h3 {
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin: 0 0 15px 0;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+.project-sidebar p {
+    margin: 0 0 30px 0;
+}
+.project-sidebar .project-tags {
+    margin-bottom: 30px;
+}
+.back-link {
+    display: inline-block;
+    margin-bottom: 80px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #111;
+}
+
+/* --- 10. Project Modal Styles --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.3s, opacity 0.3s ease;
+}
+.modal-overlay.active {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+.modal-content {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+.modal-close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #888;
+    line-height: 1;
+}
+
+/* --- 11. About Page Styles --- */
+.about-page-section {
+    padding: 60px 0;
+}
+.about-page-section h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.about-layout {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+.about-text-column {
+    flex: 2; /* Takes 2 parts of the space */
+}
+.about-resume-column {
+    flex: 3; /* Takes 3 parts of the space, making it larger */
+}
+.about-page-section h2 {
+    margin-top: 0;
+}
+.about-page-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+.resume-viewer {
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.resume-viewer iframe {
+    display: block;
+}
+.download-button {
+    display: inline-block;
+    background-color: #111;
+    color: #fff;
+    padding: 12px 25px;
+    margin-top: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.download-button:hover {
+    transform: translateY(-2px);
+    background-color: #333;
+}
+
+/* --- 12. Skills Section Styles (About Page) --- */
+.skills-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 40px;
+}
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.skill-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+.skill-icon-placeholder {
+    width: 50px;
+    height: 50px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+.skill-item p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* --- 13. Reusable Content Box Style --- */
+.content-box {
+    background-color: #f5f5f5;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* =================================== */
+/* PLAYGROUND STYLES          */
+/* =================================== */
+
+/* This targets the main content area of your playground page */
+main {
+    padding-top: 40px; /* Adds some space below the header */
+    padding-bottom: 60px; /* Adds space at the bottom of the page */
+    text-align: center; /* Centers the h1 and p tags */
+}
+
+main h1 {
+    font-size: 3rem; /* Larger font size for the main title */
+    margin-bottom: 10px;
+}
+
+main p {
+    font-size: 1.2rem;
+    color: #666; /* A slightly lighter color for the subtitle */
+    margin-bottom: 50px; /* Space between subtitle and project cards */
+}
+
+/* This creates the grid container for your projects */
+.project-grid {
+    display: grid;
+    /* Creates 3 columns of equal size. Change '1fr 1fr 1fr' to '1fr 1fr' for a 2-column layout */
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px; /* The space between the cards */
+    max-width: 1200px; /* Sets a max width for the grid */
+    margin: 0 auto; /* Centers the grid on the page */
+}
+
+/* This styles each individual project card */
+.project-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px; /* Rounded corners */
+    text-decoration: none; /* Removes the underline from the link */
+    color: #333; /* Default text color */
+    overflow: hidden; /* Ensures the image stays within the rounded corners */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left; /* Aligns text to the left inside the card */
+}
+
+/* This adds a hover effect to make the cards feel interactive */
+.project-card:hover {
+    transform: translateY(-8px); /* Lifts the card up slightly */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); /* Adds a soft shadow */
+}
+
+/* This styles the thumbnail image inside the card */
+.project-card img {
+    width: 100%;
+    height: 220px; /* Fixed height for a uniform look */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    display: block;
+}
+
+/* This styles the title of the project inside the card */
+.project-card h3 {
+    font-size: 1.4rem;
+    margin: 15px 20px 10px; /* Adds padding inside the card */
+}
+
+/* This styles the description text inside the card */
+.project-card p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
+    margin: 0 20px 20px; /* Adds padding inside the card */
+}
+
+/* This makes the grid responsive on smaller screens */
+@media (max-width: 900px) {
+    .project-grid {
+        grid-template-columns: 1fr 1fr; /* 2 columns on tablets */
+    }
+}
+
+@media (max-width: 600px) {
+    .project-grid {
+        grid-template-columns: 1fr; /* 1 column on mobile phones */
+    }
+}
