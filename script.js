@@ -1,5 +1,4 @@
 // --- PART 0: PROJECT DATA ---
-// TODO: Replace this with your actual project details
 const projectData = [
     {
         id: 1,
@@ -30,19 +29,35 @@ const projectData = [
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- PART 1: VIDEO HALFTONE EFFECT (with mobile performance check) ---
+    // --- PART 1: VIDEO HALFTONE EFFECT ---
     const CROP_OFFSET_Y = 10;
     const v = document.querySelector('#video-background');
     const canvas = document.querySelector('#halftone-canvas');
     let animationFrameId;
     
-    // --- UPDATED: Only run the heavy animation on screens wider than 768px ---
-    if (canvas && window.innerWidth > 768) {
+    if (canvas) {
         const ctx = canvas.getContext('2d');
         let width, height, fakeSize, pRatio, points = [];
         const fakeCanvas = document.createElement('canvas');
         const fakeCtx = fakeCanvas.getContext('2d');
-        function setupSizing() { width = canvas.offsetWidth; height = canvas.offsetHeight; canvas.width = width; canvas.height = height; fakeSize = Math.ceil(width / 10); pRatio = width / fakeSize; fakeCanvas.width = fakeSize; fakeCanvas.height = fakeSize; createPoints(); }
+        
+        function setupSizing() { 
+            width = canvas.offsetWidth; 
+            height = canvas.offsetHeight; 
+            canvas.width = width; 
+            canvas.height = height; 
+
+            // On desktop (width > 768px), dots are spaced by ~10px.
+            // On mobile, they are spaced by ~6px, making the grid denser.
+            const dotGridSize = width > 768 ? 10 : 6; 
+            
+            fakeSize = Math.ceil(width / dotGridSize); 
+            pRatio = width / fakeSize; 
+            fakeCanvas.width = fakeSize; 
+            fakeCanvas.height = fakeSize; 
+            createPoints(); 
+        }
+
         function createPoints() { points = []; for (let x = 0; x < fakeSize; x++) { for (let y = 0; y < fakeSize; y++) { const point = { x: x * pRatio + pRatio / 2, y: y * pRatio + pRatio / 2, r: 0 }; points.push(point); } } }
         function getPoints() { fakeCtx.save(); fakeCtx.translate(fakeSize / 2, fakeSize / 2); fakeCtx.rotate(Math.PI / 2); fakeCtx.scale(1, -1); const sourceSize = v.videoHeight; const sourceX = (v.videoWidth - sourceSize) / 2; const sourceY = 0 + CROP_OFFSET_Y; fakeCtx.drawImage(v, sourceX, sourceY, sourceSize, sourceSize, -fakeSize / 2, -fakeSize / 2, fakeSize, fakeSize); fakeCtx.restore(); const canvasData = fakeCtx.getImageData(0, 0, fakeSize, fakeSize).data; for (let i = 0; i < points.length; i++) { const p = points[i]; const red = canvasData[i * 4 + 0]; const green = canvasData[i * 4 + 1]; const blue = canvasData[i * 4 + 2]; const brightness = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255; const targetRadius = (1 - brightness) * (pRatio / 2); p.r += (targetRadius - p.r) * 0.1; } }
         function render() { getPoints(); ctx.clearRect(0, 0, width, height); ctx.fillStyle = 'white'; for (let i = 0; i < points.length; i++) { const p = points[i]; if (p.r > 0) { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); } } animationFrameId = requestAnimationFrame(render); }
@@ -59,9 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             window.addEventListener('resize', setupSizing);
         }
-    } else if (canvas) {
-        // If on mobile, just hide the canvas so the fallback image is visible
-        canvas.style.display = 'none';
     }
 
     // --- PART 2: PAGE TRANSITION SCRIPT ---
@@ -76,8 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
-
-    // --- PART 3: GITHUB API FETCH is commented out, no changes needed here ---
 
     // --- PART 4: DYNAMIC PROJECT MODAL ---
     const modalOverlay = document.getElementById('project-modal-overlay');
