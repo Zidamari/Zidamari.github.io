@@ -71,6 +71,11 @@ nav a:hover::after {
     margin-bottom: 50px;
     background-color: black;
     overflow: hidden;
+
+    /* --- ADDED: Fallback for mobile video --- */
+    background-image: url('images/fallback-background.jpg'); /* Make sure you have an image here */
+    background-size: cover;
+    background-position: center;
 }
 #video-background {
     position: absolute;
@@ -547,87 +552,79 @@ body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
+/* --- Previous Playground styles are being overridden or combined with work page styles, so I'll remove the duplicates for clarity --- */
+
+
 /* =================================== */
-/* PLAYGROUND STYLES          */
+/* 14. MOBILE RESPONSIVE STYLES      */
 /* =================================== */
 
-/* This targets the main content area of your playground page */
-main {
-    padding-top: 40px; /* Adds some space below the header */
-    padding-bottom: 60px; /* Adds space at the bottom of the page */
-    text-align: center; /* Centers the h1 and p tags */
-}
+@media (max-width: 768px) {
 
-main h1 {
-    font-size: 3rem; /* Larger font size for the main title */
-    margin-bottom: 10px;
-}
-
-main p {
-    font-size: 1.2rem;
-    color: #666; /* A slightly lighter color for the subtitle */
-    margin-bottom: 50px; /* Space between subtitle and project cards */
-}
-
-/* This creates the grid container for your projects */
-.project-grid {
-    display: grid;
-    /* Creates 3 columns of equal size. Change '1fr 1fr 1fr' to '1fr 1fr' for a 2-column layout */
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 30px; /* The space between the cards */
-    max-width: 1200px; /* Sets a max width for the grid */
-    margin: 0 auto; /* Centers the grid on the page */
-}
-
-/* This styles each individual project card */
-.project-card {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px; /* Rounded corners */
-    text-decoration: none; /* Removes the underline from the link */
-    color: #333; /* Default text color */
-    overflow: hidden; /* Ensures the image stays within the rounded corners */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: left; /* Aligns text to the left inside the card */
-}
-
-/* This adds a hover effect to make the cards feel interactive */
-.project-card:hover {
-    transform: translateY(-8px); /* Lifts the card up slightly */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); /* Adds a soft shadow */
-}
-
-/* This styles the thumbnail image inside the card */
-.project-card img {
-    width: 100%;
-    height: 220px; /* Fixed height for a uniform look */
-    object-fit: cover; /* Ensures the image covers the area without distortion */
-    display: block;
-}
-
-/* This styles the title of the project inside the card */
-.project-card h3 {
-    font-size: 1.4rem;
-    margin: 15px 20px 10px; /* Adds padding inside the card */
-}
-
-/* This styles the description text inside the card */
-.project-card p {
-    font-size: 1rem;
-    color: #666;
-    line-height: 1.5;
-    margin: 0 20px 20px; /* Adds padding inside the card */
-}
-
-/* This makes the grid responsive on smaller screens */
-@media (max-width: 900px) {
-    .project-grid {
-        grid-template-columns: 1fr 1fr; /* 2 columns on tablets */
+    /* --- General & Header --- */
+    .wrapper {
+        width: 95%; /* Use a bit more screen real estate */
     }
-}
 
-@media (max-width: 600px) {
+    header {
+        flex-direction: column; /* Stack logo and nav */
+        gap: 20px;
+    }
+
+    nav ul {
+        gap: 25px; /* Reduce gap between nav items */
+    }
+
+    /* --- Hero Section (The Main Fix) --- */
+    .main-headline {
+        font-size: 3.5rem; /* Drastically reduce font size on smaller screens */
+        -webkit-text-stroke: 1px grey;
+        text-stroke: 1px grey;
+    }
+    
+    .hero-section {
+        height: 350px; /* Make the hero a bit shorter on mobile */
+    }
+
+    /* --- About Section (Homepage) --- */
+    .about-section {
+        flex-direction: column; /* Stack text on top of image */
+        padding: 40px 25px;
+        text-align: center;
+    }
+
+    .about-text p {
+        max-width: 100%; /* Allow paragraph to fill the container */
+    }
+    
+    .image-placeholder {
+        width: 200px; /* Make the placeholder smaller */
+        height: 200px;
+    }
+
+    /* --- Contact Section --- */
+    .contact-container {
+        flex-direction: column; /* Stack details and form */
+        gap: 60px;
+    }
+    
+    /* --- Project Detail Page --- */
+    .project-detail-layout {
+        flex-direction: column;
+    }
+    .project-sidebar {
+        position: static; /* The sidebar should not be sticky on mobile */
+        width: 100%;
+        box-sizing: border-box; /* ensure padding is included in the width */
+    }
+
+    /* --- About Page --- */
+    .about-layout {
+        flex-direction: column;
+    }
+
+    /* --- Grid on work/playground page --- */
     .project-grid {
-        grid-template-columns: 1fr; /* 1 column on mobile phones */
+        grid-template-columns: 1fr; /* Single column for all project grids on mobile */
     }
 }

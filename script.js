@@ -30,13 +30,14 @@ const projectData = [
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- PART 1: VIDEO HALFTONE EFFECT ---
+    // --- PART 1: VIDEO HALFTONE EFFECT (with mobile performance check) ---
     const CROP_OFFSET_Y = 10;
     const v = document.querySelector('#video-background');
     const canvas = document.querySelector('#halftone-canvas');
     let animationFrameId;
     
-    if (canvas) {
+    // --- UPDATED: Only run the heavy animation on screens wider than 768px ---
+    if (canvas && window.innerWidth > 768) {
         const ctx = canvas.getContext('2d');
         let width, height, fakeSize, pRatio, points = [];
         const fakeCanvas = document.createElement('canvas');
@@ -47,23 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
         function render() { getPoints(); ctx.clearRect(0, 0, width, height); ctx.fillStyle = 'white'; for (let i = 0; i < points.length; i++) { const p = points[i]; if (p.r > 0) { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); } } animationFrameId = requestAnimationFrame(render); }
         
         if (v) {
-            // --- THIS IS THE CORRECTED LOGIC ---
             function startAnimation() {
                 setupSizing();
                 render();
             }
-
-            // Check if the video is already ready to play
             if (v.readyState >= 3) {
-                // If it is, start the animation immediately
                 startAnimation();
             } else {
-                // If not, wait for the 'canplay' event
                 v.addEventListener('canplay', startAnimation, { once: true });
             }
-            
             window.addEventListener('resize', setupSizing);
         }
+    } else if (canvas) {
+        // If on mobile, just hide the canvas so the fallback image is visible
+        canvas.style.display = 'none';
     }
 
     // --- PART 2: PAGE TRANSITION SCRIPT ---
@@ -79,67 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // // --- PART 3: GITHUB API FETCH (Updated to show contributions) ---
-    // async function fetchGitHubRepos() {
-    //     const username = 'Zidamari'; // Your correct GitHub username
-    //     const container = document.getElementById('github-repos-container');
-    //     if (!container) return; 
-
-    //     try {
-    //         // New API URL: Fetches the user's public activity events.
-    //         const response = await fetch(`https://api.github.com/users/${username}/events/public`);
-    //         if (!response.ok) throw new Error('Network response was not ok');
-            
-    //         const events = await response.json();
-            
-    //         // A map to store unique repositories, preventing duplicates.
-    //         const uniqueRepos = new Map();
-
-    //         // Filter events to find ones where you pushed code and get the repo info.
-    //         events.forEach(event => {
-    //             // We only care about events where you pushed code ('PushEvent').
-    //             if (event.type === 'PushEvent' && event.repo) {
-    //                 // Use the repo name as a key to store only the latest instance of each repo.
-    //                 if (!uniqueRepos.has(event.repo.name)) {
-    //                     uniqueRepos.set(event.repo.name, {
-    //                         name: event.repo.name.split('/')[1], // Show only the repo name, not 'owner/repo'
-    //                         url: `https://github.com/${event.repo.name}`,
-    //                         // You can't get description/language easily from this endpoint,
-    //                         // so we'll create a placeholder or a link to the repo.
-    //                         description: `Contributed to this repository.`
-    //                     });
-    //                 }
-    //             }
-    //         });
-
-    //         // Convert the map of unique repos into an array.
-    //         const repos = Array.from(uniqueRepos.values());
-            
-    //         if (repos.length === 0) {
-    //              container.innerHTML = `<p style="color: #555;">No recent public contributions found.</p>`;
-    //              return;
-    //         }
-
-    //         container.innerHTML = ''; // Clear the container
-
-    //         // Display the first 4 unique repositories you've contributed to.
-    //         repos.slice(0, 4).forEach(repo => {
-    //             const repoCard = document.createElement('a');
-    //             repoCard.href = repo.url;
-    //             repoCard.target = '_blank';
-    //             repoCard.rel = 'noopener noreferrer';
-    //             repoCard.className = 'repo-card';
-    //             // Note: Language data is not available in the Events API, so we simplify the card.
-    //             repoCard.innerHTML = `<h3>${repo.name}</h3><p>${repo.description}</p><span>Contribution</span>`;
-    //             container.appendChild(repoCard);
-    //         });
-
-    //     } catch (error) {
-    //         container.innerHTML = `<p style="color: #555;">Unable to fetch GitHub activity.</p>`;
-    //         console.error('Error fetching GitHub events:', error);
-    //     }
-    // }
-    // fetchGitHubRepos();
+    // --- PART 3: GITHUB API FETCH is commented out, no changes needed here ---
 
     // --- PART 4: DYNAMIC PROJECT MODAL ---
     const modalOverlay = document.getElementById('project-modal-overlay');
