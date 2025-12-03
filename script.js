@@ -1,23 +1,23 @@
-// --- PART 0: PROJECT DATA ---
+// Need to find a better way to do this inputs. See if GitHub API can solve this.
 const projectData = [
     {
         id: 1,
-        title: "Project Title Here",
-        image: "", // Optional: path to a detailed image e.g., "images/project-1-hero.jpg"
-        subtitle: "A brief, impactful summary of the project's purpose.",
+        title: "Edible Ink Printer for Early Childhood Education",
+        image: "images/printer.jpg",
+        subtitle: "Feast for the eyes, brain and mouth!",
         tags: ["JavaScript", "Python", "ROS"],
-        liveDemoUrl: "#",
-        githubUrl: "#",
-        challenge: "Describe the problem you set out to solve. What was the core issue? This project aimed to create an intuitive system for real-time robotic arm control using web technologies.",
-        solution: "Explain your step-by-step process and how your final project addresses the initial challenge. The solution involved a Node.js server for backend communication and a front-end interface built with vanilla JavaScript.",
-        learnings: "Conclude by reflecting on the project and the key takeaways. This project was a deep dive into WebSocket communication and the challenges of low-latency user interfaces."
+        liveDemoUrl: "videos/printer_demo.mp4",
+        githubUrl: "https://github.com/Nabeelkii/Automated-Food-Printer",
+        challenge: "Given an existing technology, how can I make it apply to another problem statement in another domain.",
+        solution: "Focused on Multi-sensory learning for children by linking the sense of taste and sight, and to gamify mealtimes, encouraging proactive learning",
+        learnings: "Learnt how to create a rudimentary system that integrates mobile and PC based development."
     },
     {
         id: 2,
-        title: "Another Cool Project",
+        title: "Pick and Place System with Dynamic Vision Functionality",
         image: "",
-        subtitle: "Solving a different kind of problem using design and development skills.",
-        tags: ["C++", "Fusion 360", "OpenCV"],
+        subtitle: "Capstone Project (Currently in the works)",
+        tags: ["ROS", "Solidworks", "OpenCV", "Python", "C++"],
         liveDemoUrl: "#",
         githubUrl: "#",
         challenge: "This project had a different set of challenges, focusing on computer vision to identify objects in a cluttered environment.",
@@ -26,70 +26,74 @@ const projectData = [
     }
 ];
 
-
 document.addEventListener('DOMContentLoaded', () => {
-
-    // --- PART 1: VIDEO HALFTONE EFFECT ---
-    const CROP_OFFSET_Y = 10;
-    const v = document.querySelector('#video-background');
-    const canvas = document.querySelector('#halftone-canvas');
     let animationFrameId;
-    
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let width, height, fakeSize, pRatio, points = [];
-        const fakeCanvas = document.createElement('canvas');
-        const fakeCtx = fakeCanvas.getContext('2d');
-        
-        function setupSizing() { 
-            width = canvas.offsetWidth; 
-            height = canvas.offsetHeight; 
-            canvas.width = width; 
-            canvas.height = height; 
 
-            // On desktop (width > 768px), dots are spaced by ~10px.
-            // On mobile, they are spaced by ~6px, making the grid denser.
-            const dotGridSize = width > 768 ? 10 : 6; 
+    const cardContainer = document.querySelector('.flip-card-container');
+    const card = document.querySelector('.flip-card');
+    const cardFront = document.querySelector('.flip-card-front');
+
+    if (cardContainer && card && cardFront) {
+        let isFlipped = false;
+        let currentRotateX = 0;
+        let currentRotateY = 0;
+
+        function updateTransform() {
+            const flipRotation = isFlipped ? 180 : 0;
+            card.style.transform = `rotateX(${currentRotateX}deg) rotateY(${flipRotation + currentRotateY}deg)`;
+        }
+
+        cardContainer.addEventListener('click', (e) => {
+            e.stopPropagation();
+            isFlipped = !isFlipped;
+            updateTransform();
+        });
+
+        cardContainer.addEventListener('mousemove', (e) => {
+            const rect = cardContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
             
-            fakeSize = Math.ceil(width / dotGridSize); 
-            pRatio = width / fakeSize; 
-            fakeCanvas.width = fakeSize; 
-            fakeCanvas.height = fakeSize; 
-            createPoints(); 
-        }
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            currentRotateX = (y - centerY) / 10;
+            currentRotateY = (centerX - x) / 10;
+            
+            updateTransform();
+            
+            const bgPosX = (x / rect.width) * 100;
+            const bgPosY = (y / rect.height) * 100;
+            
+            cardFront.style.setProperty('--mouse-x', `${bgPosX}%`);
+            cardFront.style.setProperty('--mouse-y', `${bgPosY}%`);
+        });
 
-        function createPoints() { points = []; for (let x = 0; x < fakeSize; x++) { for (let y = 0; y < fakeSize; y++) { const point = { x: x * pRatio + pRatio / 2, y: y * pRatio + pRatio / 2, r: 0 }; points.push(point); } } }
-        function getPoints() { fakeCtx.save(); fakeCtx.translate(fakeSize / 2, fakeSize / 2); fakeCtx.rotate(Math.PI / 2); fakeCtx.scale(1, -1); const sourceSize = v.videoHeight; const sourceX = (v.videoWidth - sourceSize) / 2; const sourceY = 0 + CROP_OFFSET_Y; fakeCtx.drawImage(v, sourceX, sourceY, sourceSize, sourceSize, -fakeSize / 2, -fakeSize / 2, fakeSize, fakeSize); fakeCtx.restore(); const canvasData = fakeCtx.getImageData(0, 0, fakeSize, fakeSize).data; for (let i = 0; i < points.length; i++) { const p = points[i]; const red = canvasData[i * 4 + 0]; const green = canvasData[i * 4 + 1]; const blue = canvasData[i * 4 + 2]; const brightness = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255; const targetRadius = (1 - brightness) * (pRatio / 2); p.r += (targetRadius - p.r) * 0.1; } }
-        function render() { getPoints(); ctx.clearRect(0, 0, width, height); ctx.fillStyle = 'white'; for (let i = 0; i < points.length; i++) { const p = points[i]; if (p.r > 0) { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); } } animationFrameId = requestAnimationFrame(render); }
-        
-        if (v) {
-            function startAnimation() {
-                setupSizing();
-                render();
-            }
-            if (v.readyState >= 3) {
-                startAnimation();
-            } else {
-                v.addEventListener('canplay', startAnimation, { once: true });
-            }
-            window.addEventListener('resize', setupSizing);
-        }
+        cardContainer.addEventListener('mouseleave', () => {
+            currentRotateX = 0;
+            currentRotateY = 0;
+            updateTransform();
+            
+            cardFront.style.setProperty('--mouse-x', '50%');
+            cardFront.style.setProperty('--mouse-y', '50%');
+        });
     }
 
-    // --- PART 2: PAGE TRANSITION SCRIPT ---
     const allLinks = document.querySelectorAll('a');
     allLinks.forEach(link => {
         if (link.hostname === window.location.hostname && !link.href.includes('#') && !link.hasAttribute('data-modal-trigger')) {
             link.addEventListener('click', e => {
-                e.preventDefault(); const destination = link.href;
-                if (typeof animationFrameId !== 'undefined') { cancelAnimationFrame(animationFrameId); }
+                e.preventDefault();
+                const destination = link.href;
+                if (typeof animationFrameId !== 'undefined') {
+                    cancelAnimationFrame(animationFrameId);
+                }
                 document.body.classList.add('fade-out');
                 setTimeout(() => { window.location.href = destination; }, 500);
             });
         }
     });
 
-    // --- PART 4: DYNAMIC PROJECT MODAL ---
     const modalOverlay = document.getElementById('project-modal-overlay');
     const modalContent = document.getElementById('project-modal-content');
     const modalTriggers = document.querySelectorAll('[data-modal-trigger]');
@@ -128,17 +132,21 @@ document.addEventListener('DOMContentLoaded', () => {
         modalOverlay.classList.remove('active');
     }
 
-    modalTriggers.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            const projectId = button.getAttribute('data-modal-trigger');
-            openModal(projectId);
+    if (modalTriggers.length > 0) {
+        modalTriggers.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const projectId = button.getAttribute('data-modal-trigger');
+                openModal(projectId);
+            });
         });
-    });
 
-    modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-            closeModal();
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
         }
-    });
+    }
 });

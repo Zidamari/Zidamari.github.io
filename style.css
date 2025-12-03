@@ -1,22 +1,197 @@
-/* 1. Import the Google Font at the very top */
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;900&display=swap');
 
-/* 2. General body and default font styles */
 body {
-    background-color: #ffffff; 
-    color: #111111; 
+    background-color: #f5f5f5;
+    color: #111111;
     font-family: 'Archivo', sans-serif;
     margin: 0;
+    padding: 0;
+    animation: fadeInAnimation 0.5s ease-in-out;
 }
 
-/* 3. Wrapper for content alignment */
+@keyframes fadeInAnimation { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOutAnimation { from { opacity: 1; } to { opacity: 0; } }
+body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
+
 .wrapper {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* 4. Header, Logo, and Navigation */
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    gap: 60px;
+    overflow: hidden;
+}
+
+.flip-card-container {
+    perspective: 1000px;
+    width: 600px;
+    height: 300px;
+    cursor: pointer;
+}
+
+.flip-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    transition: transform 0.1s ease-out;
+    border-radius: 15px;
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+.flip-card-container:hover .flip-card-front,
+.flip-card-container:hover .flip-card-back {
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+}
+
+.flip-card-front {
+    background: url('images/Logo.jpg') no-repeat center center / 120%;
+    background-position: center 45%;
+    background-color: #1a1a1a;
+    border: 2px outset #000000;
+}
+
+.flip-card-front::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background:
+        radial-gradient(
+            circle at var(--mouse-x) var(--mouse-y),
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0.05) 20%,
+            transparent 70%
+        ) no-repeat center center / 100% 100%;
+
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    filter: url(#grainy-gradient);
+    z-index: 1;
+}
+
+.flip-card-back {
+    background-color: #111111;
+    color: #ffffff;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 40px;
+    text-align: center;
+    border: 2px outset #ffffff;
+}
+
+.flip-card-back h3 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.flip-card-back .ticket-details {
+    font-size: 1.2rem;
+    margin: 0;
+    opacity: 0.9;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+}
+
+.flip-card-back .ticket-id {
+    font-size: 1rem;
+    margin: 0;
+    padding: 8px 16px;
+    border: 2px solid #ffffff;
+    border-radius: 3px;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+}
+
+.flip-card-front .ticket-content {
+    flex-grow: 1;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.flip-card-container::after {
+    content: 'Click to flip';
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #111111;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.flip-card-container:hover::after {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+
+    .flip-card-container {
+        transform: scale(0.6);
+        margin-bottom: -40px;
+    }
+    .flip-card-container::after {
+        bottom: -25px;
+        font-size: 0.8rem;
+    }
+    
+
+    .flip-card-back {
+        padding: 40px 30px;
+    }
+    
+    .flip-card-back h3 {
+        font-size: 2.5rem;
+    }
+    
+    .flip-card-back .ticket-details {
+        font-size: 1rem;
+    }
+    
+    .flip-card-back .ticket-id {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+    }
+}
+
 header {
     display: flex;
     justify-content: space-between;
@@ -60,7 +235,6 @@ nav a:hover::after {
     color: #111111;
 }
 
-/* Hero Section */
 .hero-section {
     position: relative;
     width: 100%;
@@ -71,28 +245,11 @@ nav a:hover::after {
     margin-bottom: 50px;
     background-color: black;
     overflow: hidden;
-    background-image: url('images/fallback-background.jpg'); 
+    background-image: url('images/fallback-background.jpg');
     background-size: cover;
     background-position: center;
 }
-#video-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* This makes the video fill the container */
-    z-index: 0; /* Places it behind the canvas */
-    visibility: hidden; /* Ensures it's not hidden */
-}
-#halftone-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1; 
-}
+
 .main-headline {
     position: relative;
     z-index: 3;
@@ -109,12 +266,11 @@ nav a:hover::after {
     text-align: center;
 }
 
-/* 5. About Me Section Styles (Homepage) */
 .about-section {
     display: flex;
     align-items: center;
     gap: 60px;
-    background-color: #f5f5f5;
+    background-color: #f5f5ff;
     padding: 60px;
     border-radius: 10px;
     margin-bottom: 80px;
@@ -137,7 +293,7 @@ nav a:hover::after {
 .about-text p {
     font-size: 1.1rem;
     line-height: 1.8;
-    max-width: 600px; 
+    max-width: 600px;
 }
 .image-placeholder {
     width: 300px;
@@ -146,7 +302,6 @@ nav a:hover::after {
     border-radius: 50%;
 }
 
-/* 6. Contact Section Styles */
 .contact-section { padding: 80px 0; }
 .contact-section h2 {
     font-size: 3rem;
@@ -228,14 +383,6 @@ nav a:hover::after {
 }
 .submit-button:hover { background-color: #555555; }
 
-/* 7. Page Transition Styles */
-body { animation: fadeInAnimation 0.5s ease-in-out; }
-@keyframes fadeInAnimation { from { opacity: 0; } to { opacity: 1; } }
-body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
-@keyframes fadeOutAnimation { from { opacity: 1; } to { opacity: 0; } }
-
-
-/* --- 8. Work Page & Project Styles --- */
 .work-section { padding: 60px 0; }
 .work-section h1 {
     font-size: 3rem;
@@ -270,7 +417,7 @@ body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
 }
 .project-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 .project-image {
     width: 100%;
@@ -324,8 +471,12 @@ body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
 .project-button:hover, .project-button-secondary:hover {
     transform: translateY(-2px);
 }
+.project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-/* --- 9. Project Detail Page Styles --- */
 .project-hero {
     background-color: #111;
     color: #fff;
@@ -399,7 +550,6 @@ body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
     color: #111;
 }
 
-/* --- 10. Project Modal Styles --- */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -447,7 +597,6 @@ body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
     line-height: 1;
 }
 
-/* --- 11. About Page Styles --- */
 .about-page-section {
     padding: 60px 0;
 }
@@ -502,7 +651,6 @@ body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
     background-color: #333;
 }
 
-/* --- 12. Skills Section Styles (About Page) --- */
 .skills-section h2 {
     text-align: center;
     font-size: 2rem;
@@ -546,7 +694,6 @@ body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
     font-size: 1rem;
 }
 
-/* --- 13. Reusable Content Box Style --- */
 .content-box {
     background-color: #f5f5f5;
     padding: 50px;
@@ -554,75 +701,92 @@ body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* =================================== */
-/* 14. MOBILE RESPONSIVE STYLES      */
-/* =================================== */
-
 @media (max-width: 768px) {
 
-    /* --- General & Header --- */
     .wrapper {
-        width: 95%; 
+        width: 95%;
     }
-
     header {
-        flex-direction: column; 
+        flex-direction: column;
         gap: 20px;
     }
-
     nav ul {
-        gap: 25px; 
+        gap: 25px;
     }
 
-    /* --- Hero Section (The Main Fix) --- */
+    .flip-card-container {
+        transform: scale(0.6);
+        margin-bottom: -40px;
+    }
+    .flip-card-container::after {
+        bottom: -25px;
+        font-size: 0.8rem;
+    }
+    
+    .landing-nav ul {
+        flex-direction: row;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .landing-nav a {
+        font-size: 1rem;
+    }
+    .landing-container {
+        gap: 30px;
+    }
+
+    .flip-card-back h3 {
+        font-size: 2.5em;
+    }
+    .flip-card-back .ticket-details {
+        font-size: 1.2em;
+    }
+    .flip-card-back .ticket-id {
+        font-size: 1.5em;
+        padding: 8px 20px;
+    }
+
     .main-headline {
-        font-size: 3.5rem; 
+        font-size: 3.5rem;
         -webkit-text-stroke: 1px grey;
         text-stroke: 1px grey;
     }
-    
     .hero-section {
-        height: 350px; 
+        height: 350px;
     }
 
-    /* --- About Section (Homepage) --- */
     .about-section {
-        flex-direction: column; 
+        flex-direction: column;
         padding: 40px 25px;
         text-align: center;
     }
-
     .about-text p {
-        max-width: 100%; 
+        max-width: 100%;
     }
-    
     .image-placeholder {
-        width: 200px; 
+        width: 200px;
         height: 200px;
     }
 
-    /* --- Contact Section --- */
     .contact-container {
-        flex-direction: column; 
+        flex-direction: column;
         gap: 60px;
     }
-    
-    /* --- Project Detail Page --- */
+
     .project-detail-layout {
         flex-direction: column;
     }
     .project-sidebar {
-        position: static; 
+        position: static;
         width: 100%;
         box-sizing: border-box;
     }
 
-    /* --- About Page --- */
     .about-layout {
         flex-direction: column;
     }
 
-    /* --- Grid on work/playground page --- */
     .project-grid {
         grid-template-columns: 1fr;
     }
