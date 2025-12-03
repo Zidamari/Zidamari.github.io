@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let isFlipped = false;
         let currentRotateX = 0;
         let currentRotateY = 0;
+        
+        // Check if device supports touch (mobile)
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
         function updateTransform() {
             const flipRotation = isFlipped ? 180 : 0;
@@ -49,35 +52,39 @@ document.addEventListener('DOMContentLoaded', () => {
             updateTransform();
         });
 
-        cardContainer.addEventListener('mousemove', (e) => {
-            const rect = cardContainer.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            currentRotateX = (y - centerY) / 10;
-            currentRotateY = (centerX - x) / 10;
-            
-            updateTransform();
-            
-            const bgPosX = (x / rect.width) * 100;
-            const bgPosY = (y / rect.height) * 100;
-            
-            cardFront.style.setProperty('--mouse-x', `${bgPosX}%`);
-            cardFront.style.setProperty('--mouse-y', `${bgPosY}%`);
-        });
+        // Only add hover effects on non-touch devices
+        if (!isTouchDevice) {
+            cardContainer.addEventListener('mousemove', (e) => {
+                const rect = cardContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                currentRotateX = (y - centerY) / 10;
+                currentRotateY = (centerX - x) / 10;
+                
+                updateTransform();
+                
+                const bgPosX = (x / rect.width) * 100;
+                const bgPosY = (y / rect.height) * 100;
+                
+                cardFront.style.setProperty('--mouse-x', `${bgPosX}%`);
+                cardFront.style.setProperty('--mouse-y', `${bgPosY}%`);
+            });
 
-        cardContainer.addEventListener('mouseleave', () => {
-            currentRotateX = 0;
-            currentRotateY = 0;
-            updateTransform();
-            
-            cardFront.style.setProperty('--mouse-x', '50%');
-            cardFront.style.setProperty('--mouse-y', '50%');
-        });
+            cardContainer.addEventListener('mouseleave', () => {
+                currentRotateX = 0;
+                currentRotateY = 0;
+                updateTransform();
+                
+                cardFront.style.setProperty('--mouse-x', '50%');
+                cardFront.style.setProperty('--mouse-y', '50%');
+            });
+        }
     }
+
 
     const allLinks = document.querySelectorAll('a');
     allLinks.forEach(link => {

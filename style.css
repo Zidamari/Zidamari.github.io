@@ -165,15 +165,16 @@ body.fade-out { animation: fadeOutAnimation 0.5s ease-in-out forwards; }
 @media (max-width: 768px) {
 
     .flip-card-container {
-        transform: scale(0.6);
+        transform: scale(0.54); 
         margin-bottom: -40px;
     }
+    
     .flip-card-container::after {
+        content: 'Tap to flip'; 
         bottom: -25px;
         font-size: 0.8rem;
     }
     
-
     .flip-card-back {
         padding: 40px 30px;
     }
