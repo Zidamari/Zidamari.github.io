@@ -156,4 +156,89 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    // GitHub repos fetcher
+    const githubReposContainer = document.getElementById('github-repos-container');
+    if (githubReposContainer) {
+        fetchGitHubRepos('Zidamari');
+    }
+
+    async function fetchGitHubRepos(username) {
+        try {
+            const cacheKey = `github_repos_${username}`;
+            const cacheTimeKey = `github_repos_time_${username}`;
+            const cachedData = localStorage.getItem(cacheKey);
+            const cacheTime = localStorage.getItem(cacheTimeKey);
+            
+            if (cachedData && cacheTime) {
+                const age = Date.now() - parseInt(cacheTime);
+                if (age < 10 * 60 * 1000) {
+                    const repos = JSON.parse(cachedData);
+                    displayGitHubRepos(repos);
+                    return;
+                }
+            }
+            
+            const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+            
+            if (response.status === 403) {
+                const resetTime = response.headers.get('X-RateLimit-Reset');
+                const resetDate = resetTime ? new Date(resetTime * 1000) : null;
+                const message = resetDate 
+                    ? `Rate limit exceeded. Resets at ${resetDate.toLocaleTimeString()}.` 
+                    : 'Rate limit exceeded. Please try again later.';
+                githubReposContainer.innerHTML = `<p style="text-align: center; color: #666;">${message}</p>`;
+                return;
+            }
+            
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const repos = await response.json();
+            const topRepos = repos.slice(0, 6);
+            
+            localStorage.setItem(cacheKey, JSON.stringify(topRepos));
+            localStorage.setItem(cacheTimeKey, Date.now().toString());
+            
+            displayGitHubRepos(topRepos);
+        } catch (error) {
+            console.error('Error fetching GitHub repos:', error);
+            githubReposContainer.innerHTML = `<p style="text-align: center; color: #666;">Unable to load repositories. Error: ${error.message}</p>`;
+        }
+    }
+
+    function displayGitHubRepos(repos) {
+        if (repos.length === 0) {
+            githubReposContainer.innerHTML = '<p style="text-align: center;">No repositories found.</p>';
+            return;
+        }
+
+        const reposHTML = repos.map(repo => `
+            <div class="github-repo-card">
+                <div class="repo-header">
+                    <h3><a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">${repo.name}</a></h3>
+                    ${repo.fork ? '<span class="repo-badge contributed">Fork</span>' : ''}
+                </div>
+                <p>${repo.description || 'No description available'}</p>
+                <div class="repo-stats">
+                    ${repo.language ? `<span class="repo-language">${repo.language}</span>` : ''}
+                    <span class="repo-stars">⭐ ${repo.stargazers_count}</span>
+                    <span class="repo-forks">🔀 ${repo.forks_count}</span>
+                </div>
+            </div>
+        `).join('');
+
+        githubReposContainer.innerHTML = reposHTML;
+        
+        const repoTitles = document.querySelectorAll('.github-repo-card h3');
+        repoTitles.forEach(title => {
+            let fontSize = 1.3;
+            const minFontSize = 0.85;
+            title.style.fontSize = `${fontSize}rem`;
+            
+            while (title.scrollWidth > title.clientWidth && fontSize > minFontSize) {
+                fontSize -= 0.05;
+                title.style.fontSize = `${fontSize}rem`;
+            }
+        });
+    }
 });
